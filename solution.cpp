@@ -1,6 +1,5 @@
 /* ----------------------------------------------------------------------------
  * Copyright &copy; 2015 Ben Blazak <bblazak@fullerton.edu>
- *                  2015 TODO(your name) <TODO(your email)>
  * Released under the [MIT License] (http://opensource.org/licenses/MIT)
  * ------------------------------------------------------------------------- */
 
@@ -134,5 +133,75 @@ int main() {
 
 // ----------------------------------------------------------------------------
 
-// TODO: write prototyped functions
+int find_max(const string& infilename) {
+    ifstream infile(infilename);
+    if (!infile.is_open())
+        return -1;  // error
+
+    int max = -1;
+
+    int n;
+    for (infile >> n; infile.good(); infile >> n) {
+        if (n > max)
+            max = n;
+    }
+
+    return max;
+}
+
+void sieve(const int size, bool primes[]) {
+    // set all entries to `true`
+    for (int a = 0; a < size; a++) {
+        primes[a] = true;
+    }
+
+    // mark special cases `0` and `1` as `false`
+    primes[0] = false;
+    primes[1] = false;
+
+    // for the rest of the numbers, iterating from low indices to high, if a
+    // number is marked as `true`, mark all multiples of it as `false`
+    // - note that in the outer loop we could stop at `sqrt(size)`
+    for (int a = 2; a < size; a++) {
+        if (primes[a] == true)
+            for (int b = a+a; b < size; b += a)
+                primes[b] = false;
+    }
+}
+
+int write_primes( const int size,
+                  bool primes[],
+                  const string& infilename,
+                  const string& outfilename ) {
+
+    ifstream infile(infilename);
+    ofstream outfile(outfilename);
+    if ( !infile.is_open() || !outfile.is_open() )
+        return -1;  // error
+
+    int n;
+    for (infile >> n; infile.good(); infile >> n)
+        if (primes[n] == true)
+            outfile << n << endl;
+
+    return 0;  // success
+}
+
+int write_composites( const int size,
+                      bool primes[],
+                      const string& infilename,
+                      const string& outfilename ) {
+
+    ifstream infile(infilename);
+    ofstream outfile(outfilename);
+    if ( !infile.is_open() || !outfile.is_open() )
+        return -1;  // error
+
+    int n;
+    for (infile >> n; infile.good(); infile >> n)
+        if (primes[n] == false)
+            outfile << n << endl;
+
+    return 0;  // success
+}
 
